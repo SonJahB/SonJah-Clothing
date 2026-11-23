@@ -7,6 +7,7 @@ const PUBLIC_DIR = path.join(ROOT, "public");
 const DATA_FILE = path.join(ROOT, "data", "products.json");
 const PORT = Number(process.env.PORT || 3000);
 const ADMIN_API_KEY = process.env.ADMIN_API_KEY;
+const CORS_ORIGINS = new Set((process.env.CORS_ORIGINS || "").split(",").map((origin) => origin.trim()).filter(Boolean));
 const MIME_TYPES = {
   ".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8",
   ".js": "text/javascript; charset=utf-8", ".png": "image/png", ".json": "application/json; charset=utf-8"
@@ -23,7 +24,7 @@ async function writeProducts(products) {
 }
 
 function sendJson(response, status, data) {
-  response.writeHead(status, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
+  response.writeHead(status, { ...response.getHeaders(), "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
   response.end(JSON.stringify(data));
 }
 
@@ -49,6 +50,28 @@ function isValidCatalogue(products) {
 const server = http.createServer(async (request, response) => {
   try {
     const url = new URL(request.url, `http://${request.headers.host || "localhost"}`);
+    if (url.pathname.startsWith("/api/")) {
+      const origin = request.headers.origin;
+      if (origin) {
+        const forwardedProtocol = request.headers["x-forwarded-proto"]?.split(",")[0].trim();
+        const protocol = forwardedProtocol || (request.socket.encrypted ? "https" : "http");
+        const sameOrigin = origin === `${protocol}://${request.headers.host}`;
+        if (!sameOrigin && !CORS_ORIGINS.has(origin)) {
+          return sendJson(response, 403, { error: "This website origin is not allowed by the backend CORS_ORIGINS setting." });
+        }
+        response.setHeader("Access-Control-Allow-Origin", origin);
+        response.setHeader("Vary", "Origin");
+      }
+      if (url.pathname === "/api/products" && request.method === "OPTIONS") {
+        response.writeHead(204, {
+          ...response.getHeaders(),
+          "Access-Control-Allow-Methods": "GET, PUT, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization",
+          "Access-Control-Max-Age": "86400"
+        });
+        return response.end();
+      }
+    }
     if (url.pathname === "/api/products" && request.method === "GET") {
       return sendJson(response, 200, await readProducts());
     }
