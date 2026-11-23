@@ -4,7 +4,9 @@ const path = require("node:path");
 
 const ROOT = __dirname;
 const PUBLIC_DIR = path.join(ROOT, "public");
-const DATA_FILE = path.join(ROOT, "data", "products.json");
+const SEED_FILE = path.join(ROOT, "data", "products.json");
+const DATA_DIR = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : path.dirname(SEED_FILE);
+const DATA_FILE = path.join(DATA_DIR, "products.json");
 const PORT = Number(process.env.PORT || 3000);
 const ADMIN_API_KEY = process.env.ADMIN_API_KEY;
 const CORS_ORIGINS = new Set((process.env.CORS_ORIGINS || "").split(",").map((origin) => origin.trim()).filter(Boolean));
@@ -14,10 +16,18 @@ const MIME_TYPES = {
 };
 
 async function readProducts() {
-  return JSON.parse(await fs.readFile(DATA_FILE, "utf8"));
+  try {
+    return JSON.parse(await fs.readFile(DATA_FILE, "utf8"));
+  } catch (error) {
+    if (error.code !== "ENOENT" || DATA_FILE === SEED_FILE) throw error;
+    await fs.mkdir(DATA_DIR, { recursive: true });
+    await fs.copyFile(SEED_FILE, DATA_FILE);
+    return JSON.parse(await fs.readFile(DATA_FILE, "utf8"));
+  }
 }
 
 async function writeProducts(products) {
+  await fs.mkdir(DATA_DIR, { recursive: true });
   const temporaryFile = `${DATA_FILE}.tmp`;
   await fs.writeFile(temporaryFile, `${JSON.stringify(products, null, 2)}\n`);
   await fs.rename(temporaryFile, DATA_FILE);
