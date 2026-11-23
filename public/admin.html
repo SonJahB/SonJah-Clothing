@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="SonJah Clothing product administration prototype.">
+    <title>Admin Dashboard | SonJah Clothing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Lilita+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/products.js" defer></script>
+    <script src="assets/js/admin.js" defer></script>
+    <script src="assets/js/sidebar.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Open pages menu" aria-controls="page-sidebar" aria-expanded="false">
+        <span class="menu-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+      <a class="site-title" href="index.html" aria-label="SonJah Clothing home"><img class="site-logo" src="assets/images/sonjah-logo.png" alt="SonJah Clothing"></a>
+    </header>
+
+    <button class="sidebar-backdrop" id="sidebar-backdrop" type="button" aria-label="Close pages menu" hidden></button>
+    <aside class="sidebar" id="page-sidebar" aria-label="Pages" aria-hidden="true" inert>
+      <p class="sidebar-heading">Explore</p>
+      <nav aria-label="Page navigation">
+        <a href="index.html">Home</a>
+        <a href="index.html#catalogue">Catalogue</a>
+        <a href="admin.html" aria-current="page">Admin dashboard</a>
+      </nav>
+      <p class="sidebar-note">SonJah Clothing</p>
+    </aside>
+
+    <main class="admin-main">
+      <section class="admin-intro">
+        <div>
+          <p class="eyebrow">Store management</p>
+          <h1>Admin dashboard</h1>
+          <p>Manage catalogue items and check the backend connection status.</p>
+        </div>
+        <div class="admin-stat" aria-live="polite">
+          <span class="admin-stat-value" id="product-count">0</span>
+          <span>catalogue items</span>
+        </div>
+      </section>
+
+      <aside class="admin-notice" aria-label="Prototype and security information">
+        <strong>Shared catalogue backend.</strong>
+        Catalogue changes are saved on the server. Editing requires the admin API key configured by the site owner.
+      </aside>
+
+      <section class="admin-layout" aria-label="Product management">
+        <div class="admin-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Catalogue</p>
+              <h2 id="product-form-title">Add clothing item</h2>
+            </div>
+          </div>
+          <form id="product-form" class="admin-form">
+            <input type="hidden" name="id" id="product-id">
+            <label>Clothing name
+              <input name="name" id="product-name" type="text" required maxlength="80" placeholder="For example, Classic Graphic Tee">
+            </label>
+            <div class="admin-form-row">
+              <label>Price (Robux)
+                <input name="price" id="product-price" type="number" required min="0" step="1" inputmode="numeric">
+              </label>
+              <label>Category
+                <select name="category" id="product-category" required>
+                  <option value="shirts">Shirts</option>
+                  <option value="pants">Pants</option>
+                  <option value="accessories">Accessories</option>
+                </select>
+              </label>
+            </div>
+            <label>Description
+              <textarea name="description" id="product-description" required rows="4" maxlength="500"></textarea>
+            </label>
+            <label>Image URL
+              <input name="image" id="product-image" type="url" required placeholder="https://example.com/image.jpg">
+            </label>
+            <label>Purchase URL <span class="muted">(optional)</span>
+              <input name="purchaseUrl" id="product-purchase-url" type="url" placeholder="https://www.roblox.com/catalog/...">
+            </label>
+            <label>Availability
+              <select name="availability" id="product-availability">
+                <option value="available">Available</option>
+                <option value="sold-out">Sold out</option>
+              </select>
+            </label>
+            <div class="admin-form-actions">
+              <button class="button" type="submit" id="save-product">Add item</button>
+              <button class="button button-secondary" type="button" id="cancel-edit" hidden>Cancel edit</button>
+            </div>
+            <p class="admin-message" id="product-message" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+
+        <div class="admin-panel inventory-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Items</p>
+              <h2>Current catalogue</h2>
+            </div>
+          </div>
+          <div class="table-scroll">
+            <table class="inventory-table">
+              <thead>
+                <tr>
+                  <th scope="col">Item</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Status</th>
+                  <th scope="col"><span class="visually-hidden">Actions</span></th>
+                </tr>
+              </thead>
+              <tbody id="inventory-list"></tbody>
+            </table>
+          </div>
+          <p class="admin-message" id="storage-message" role="status" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <section class="admin-panel orders-panel" aria-labelledby="orders-title">
+        <p class="eyebrow">Backend connection</p>
+        <h2 id="orders-title">Submitted orders</h2>
+        <p class="muted">Order viewing is not connected. Once a backend is available, this area can load orders from an authenticated API.</p>
+        <div class="backend-requirements">
+          <h3>Backend requirements</h3>
+          <ul>
+            <li>Authenticate administrators on the server and authorize every product and order change.</li>
+            <li>Store products and submitted orders in a shared database.</li>
+            <li>Expose protected API endpoints for catalogue updates and order records.</li>
+            <li>Keep payment processing and secrets on the server or with a payment provider.</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>SonJah Clothing · Admin</p>
+    </footer>
+  </body>
+</html>

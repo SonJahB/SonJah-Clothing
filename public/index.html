@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Discover creative and unique Roblox clothing designs from SonJah Clothing.">
+    <title>SonJah Clothing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Lilita+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/products.js" defer></script>
+    <script src="assets/js/script.js" defer></script>
+    <script src="assets/js/sidebar.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Open pages menu" aria-controls="page-sidebar" aria-expanded="false">
+        <span class="menu-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+      <a class="site-title" href="index.html#home" aria-label="SonJah Clothing home"><img class="site-logo" src="assets/images/sonjah-logo.png" alt="SonJah Clothing"></a>
+    </header>
+
+    <button class="sidebar-backdrop" id="sidebar-backdrop" type="button" aria-label="Close pages menu" hidden></button>
+    <aside class="sidebar" id="page-sidebar" aria-label="Pages" aria-hidden="true" inert>
+      <p class="sidebar-heading">Explore</p>
+      <nav aria-label="Page navigation">
+        <a href="#home" data-route-link="home">Home</a>
+        <a href="#catalogue" data-route-link="catalogue">Catalogue</a>
+        <a href="admin.html">Admin dashboard</a>
+      </nav>
+      <p class="sidebar-note">SonJah Clothing</p>
+    </aside>
+
+    <main>
+      <div class="page home-page" id="home">
+        <section class="intro section home-hero" id="home-hero" aria-labelledby="home-title">
+          <img class="home-hero-image" src="assets/images/hero-artwork.png" alt="SonJah Clothing electric blue streetwear artwork with a jacket, chain and graffiti logo" fetchpriority="high">
+          <div class="hero-copy">
+            <p class="eyebrow">Independent Roblox fashion</p>
+            <h1 id="home-title"><span>Your style.</span><span>Your choice.</span></h1>
+            <p>Make it yours with SonJah Clothing.</p>
+            <a class="button" href="#catalogue">Shop collection <span aria-hidden="true">↗</span></a>
+          </div>
+          <a class="hero-scroll" href="#catalogue">Shop the collection <span aria-hidden="true">↓</span></a>
+        </section>
+
+        <section class="brand-story" id="brand-story" aria-labelledby="brand-story-title">
+          <p class="eyebrow">Welcome to SonJah Clothing</p>
+          <h2 id="brand-story-title">Made for self-expression.</h2>
+          <div class="brand-story-copy">
+            <p>SonJah Clothing is all about bringing unique clothing designs to the Roblox community. Whether you're looking for something casual, fresh, bold or completely different, we're here to help you find designs that match your style.</p>
+            <p>Our goal is to create clothing that lets people express themselves, stand out and enjoy discovering new designs. Every design is created with creativity and passion, with more clothing coming as we continue to grow.</p>
+            <p>Explore our collection, discover new designs and find something that suits you.</p>
+            <p class="brand-tagline"><strong>Your style. Your creativity. Your choice.</strong></p>
+          </div>
+        </section>
+      </div>
+
+      <section class="section page" id="catalogue" aria-labelledby="catalogue-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Shop</p>
+            <h2 id="catalogue-title">Clothing catalogue</h2>
+          </div>
+          <p id="results-count" class="muted" aria-live="polite"></p>
+        </div>
+
+        <form class="filters" id="filter-form" role="search">
+          <label class="search-field">Search clothing
+            <input id="search-input" type="search" placeholder="Search by name or description">
+          </label>
+          <label>Category
+            <select id="category-filter">
+              <option value="all">All categories</option>
+              <option value="shirts">Shirts</option>
+              <option value="pants">Pants</option>
+              <option value="accessories">Accessories</option>
+            </select>
+          </label>
+          <label>Sort by
+            <select id="sort-filter">
+              <option value="featured">Featured</option>
+              <option value="price-asc">Price: low to high</option>
+              <option value="price-desc">Price: high to low</option>
+              <option value="name">Name</option>
+            </select>
+          </label>
+          <button class="button button-secondary" id="clear-filters" type="button">Clear filters</button>
+        </form>
+
+        <div class="product-grid" id="product-grid" aria-live="polite"></div>
+        <p class="empty-state" id="empty-state" hidden>No items match those filters.</p>
+      </section>
+
+      <section class="section detail-section page" id="product-details" aria-labelledby="details-title" hidden>
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Selected item</p>
+            <h2 id="details-title">Product details</h2>
+          </div>
+          <button class="button button-secondary" type="button" id="close-details">Close details</button>
+        </div>
+        <div id="detail-content" class="detail-content"></div>
+      </section>
+
+    </main>
+
+    <footer class="site-footer">
+      <p>SonJah Clothing</p>
+    </footer>
+  </body>
+</html>
